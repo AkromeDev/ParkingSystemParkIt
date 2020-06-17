@@ -25,6 +25,10 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -70,6 +74,7 @@ public class ParkingDataBaseIT {
     }
     
     @Test
+    @DisplayName("Tests if the car can be found in the system")
     public void testParkingACar() throws Exception{
     	//ARRANGE
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -82,10 +87,10 @@ public class ParkingDataBaseIT {
         // ASSERT
         assertEquals(ticket.getVehicleRegNumber(), testRegistrationNumber);
         
-        //TODO: check that a ticket is actually saved in DB and Parking table is updated with availability
     }
     
     @Test
+    @DisplayName("Tests if the parking spot availability is set to false")
     public void testParkingTableAvailability() throws Exception{
     	//ARRANGE
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -95,21 +100,52 @@ public class ParkingDataBaseIT {
         Ticket ticket = ticketDAO.getTicket("ABCDEF");
 
         // ASSERT
-        assertEquals(ticket.getParkingSpot().isAvailable(), false);
-        //TODO: check that a ticket is actually saved in DB and Parking table is updated with availability
+        assertFalse(ticket.getParkingSpot().isAvailable());
     }
     
     @Test
-    public void testParkingLotExit() throws ClassNotFoundException{
+    @DisplayName("Tests if a price is set in the DB")
+    public void testParkingLotExitPrice() throws ClassNotFoundException{
+    	//ARRANGE
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        
+        //ACT 
+        parkingService.processIncomingVehicle();
+        
+        Ticket ticket = ticketDAO.getTicket("ABCDEF");
+        
         try {
-			testParkingACar();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        
         parkingService.processExitingVehicle();
+        
+        // ASSERT
+        assertEquals(ticket.getPrice(), 1.5*(1/60/60));
+        assertNotNull(ticket.getPrice());
+        
         //TODO: check that the fare generated and out time are populated correctly in the database
     }
 
+    @Test
+    @DisplayName("Tests if an OutTime is set in the DB")
+    public void testParkingLotExitOutTime() throws ClassNotFoundException{
+    	//ARRANGE
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        
+        //ACT 
+        parkingService.processIncomingVehicle();
+        
+        parkingService.processExitingVehicle();
+
+        Ticket ticket = ticketDAO.getTicket("ABCDEF");
+        
+        // ASSERT
+        assertNotNull(ticket.getOutTime());
+        
+        //TODO: check that the fare generated and out time are populated correctly in the database
+    }
+    
 }
