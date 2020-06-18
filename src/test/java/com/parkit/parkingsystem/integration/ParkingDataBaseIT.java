@@ -152,7 +152,7 @@ public class ParkingDataBaseIT {
         // ASSERT
         assertNotNull(ticket.getOutTime());
         
-        //TODO: check if everything is ok, this test fails 30% of the time 
+        //TODO: check if everything is ok, this test fails 30% of the time - This is a big To do
     }
     
     @Test
