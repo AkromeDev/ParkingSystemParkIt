@@ -140,6 +140,7 @@ public class FareCalculatorServiceTest {
     }
     
     @Test
+    @ DisplayName("Test if the price for returning visitors has 5% discount")
     public void calculateFareCarForReturningVisitorsOneHundredHours(){
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  100 * 60 * 60 * 1000) );	//100 hours parking time should give 95 * parking fare per hour
