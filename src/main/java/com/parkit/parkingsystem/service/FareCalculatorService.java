@@ -21,6 +21,7 @@ public class FareCalculatorService {
         	ticket.setPrice(0);
         	
         } else {
+        	
 	        switch (ticket.getParkingSpot().getParkingType()){
 	            case CAR: {
 	                ticket.setPrice(durationHours * Fare.CAR_RATE_PER_HOUR);
@@ -34,4 +35,9 @@ public class FareCalculatorService {
 	        }
         }
     }
+
+	public void calculateFareReturningVisitors(Ticket ticket) {
+		// TODO Auto-generated method stub
+		
+	}
 }
