@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -137,7 +138,6 @@ public class ParkingDataBaseIT {
         
         //ACT 
         parkingService.processIncomingVehicle();
-        
         parkingService.processExitingVehicle();
 
         Ticket ticket = ticketDAO.getTicket("ABCDEF");
@@ -146,6 +146,25 @@ public class ParkingDataBaseIT {
         assertNotNull(ticket.getOutTime());
         
         //TODO: check that the fare generated and out time are populated correctly in the database
+    }
+    
+    @Test
+    @DisplayName("Tests if the system recognizes a returning user")
+    public void testInputReaderUtilReturningUser() throws ClassNotFoundException{
+    	//ARRANGE
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        InputReaderUtil inputCheck = new InputReaderUtil();
+        
+        //ACT 
+        parkingService.processIncomingVehicle();
+        parkingService.processExitingVehicle();
+        
+        parkingService.processIncomingVehicle();
+        // the vehicle enter the parking a second time
+        Ticket ticket = ticketDAO.getTicket("ABCDEF");
+        
+        // ASSERT
+        assertTrue(inputCheck.readIfReturningUser(ticket.getVehicleRegNumber()));
     }
     
 }

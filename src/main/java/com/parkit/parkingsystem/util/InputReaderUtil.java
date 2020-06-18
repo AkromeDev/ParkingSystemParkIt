@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Scanner;
+import java.util.function.BooleanSupplier;
 
 public class InputReaderUtil {
 
@@ -34,6 +35,11 @@ public class InputReaderUtil {
             throw e;
         }
     }
+
+	public BooleanSupplier readIfReturningUser(String vehicleRegNumber) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 
 }
