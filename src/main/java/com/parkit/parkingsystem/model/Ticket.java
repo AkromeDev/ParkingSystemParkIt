@@ -9,6 +9,7 @@ public class Ticket {
     private double price;
     private Date inTime;
     private Date outTime;
+    private boolean isReturningUser;
 
     public int getId() {
         return id;
@@ -56,5 +57,13 @@ public class Ticket {
 
     public void setOutTime(Date outTime) {
         this.outTime = outTime;
+    }
+    
+    public boolean getIsReturningUser() {
+        return isReturningUser;
+    }
+
+    public void setIsReturningUser(boolean isReturningUser) {
+        this.isReturningUser = isReturningUser;
     }
 }

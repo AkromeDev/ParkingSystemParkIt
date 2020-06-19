@@ -4,14 +4,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.parkit.parkingsystem.config.DataBaseConfig;
+import com.parkit.parkingsystem.model.Ticket;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
-import java.util.function.BooleanSupplier;
 
 public class InputReaderUtil {
 
@@ -43,10 +42,9 @@ public class InputReaderUtil {
         }
     }
 
-	public Boolean readIfReturningUser(String vehicleRegNumber) throws ClassNotFoundException {
+	public void readIfReturningUser(String vehicleRegNumber) throws ClassNotFoundException {
 		
-		Boolean isReturningUser = null;
-		
+		Ticket ticket = new Ticket();
 		
 		try {
 				DataBaseConfig conn = new DataBaseConfig();
@@ -57,23 +55,22 @@ public class InputReaderUtil {
 		        ResultSet r1= stmt.executeQuery(SQL);
 		        
 		        if (r1.next()) {
-		        	isReturningUser = true;
+		        	ticket.setIsReturningUser(true);
 		        	System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
 					} else {
-					isReturningUser = false;
+					ticket.setIsReturningUser(false);
 				} 
 	        
 			} catch (SQLException ex) {
 				ex.printStackTrace();
-			}
-		return isReturningUser; 
+		}
 	}
 	
 	
-	public Boolean readIfReturningUser2(String vehicleRegNumber) throws ClassNotFoundException {
+	public void readIfReturningUser2(String vehicleRegNumber) throws ClassNotFoundException {
 		
-		Boolean isReturningUser = null;
-
+		Ticket ticket = new Ticket();
+		
 		try {
 				DataBaseConfig conn = new DataBaseConfig();
 				Connection conn1 = conn.getConnection();
@@ -91,17 +88,15 @@ public class InputReaderUtil {
 		        
 		        
 		        if (r2 > 0) {
-						isReturningUser = true;
+		        		ticket.setIsReturningUser(true);
 						System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
 					} else {
-						isReturningUser = false;
+						ticket.setIsReturningUser(false);
 				}
 	        
 			} catch (SQLException ex) {
 				ex.printStackTrace();
 			} 
-		return isReturningUser;
-			
 	}
 			
 }

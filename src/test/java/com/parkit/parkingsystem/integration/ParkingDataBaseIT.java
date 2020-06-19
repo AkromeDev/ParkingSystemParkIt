@@ -160,7 +160,6 @@ public class ParkingDataBaseIT {
     public void testInputReaderUtilReturningUser() throws ClassNotFoundException{
     	//ARRANGE
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-        InputReaderUtil inputCheck = new InputReaderUtil();
         
         //ACT 
         parkingService.processIncomingVehicle();
@@ -170,7 +169,7 @@ public class ParkingDataBaseIT {
         Ticket ticket = ticketDAO.getTicket("ABCDEF");
         
         // ASSERT
-        assertTrue(inputCheck.readIfReturningUser(ticket.getVehicleRegNumber()));
+        assertTrue(ticket.getIsReturningUser());
     }
     
     
@@ -179,7 +178,6 @@ public class ParkingDataBaseIT {
 	public void testInputReaderUtilReturningUser2() throws ClassNotFoundException{
 		//ARRANGE
 	    ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-	    InputReaderUtil inputCheck = new InputReaderUtil();
 	    
 	    //ACT 
 	    parkingService.processIncomingVehicle();
@@ -189,7 +187,7 @@ public class ParkingDataBaseIT {
 	    Ticket ticket = ticketDAO.getTicket("ABCDEF");
 	    
 	    // ASSERT
-	    assertTrue(inputCheck.readIfReturningUser2(ticket.getVehicleRegNumber()));
+	    assertTrue(ticket.getIsReturningUser());
 	}
 
 }
