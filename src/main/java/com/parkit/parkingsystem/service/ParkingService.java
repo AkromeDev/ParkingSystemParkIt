@@ -9,6 +9,7 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class ParkingService {
@@ -101,7 +102,13 @@ public class ParkingService {
         try{
             String vehicleRegNumber = getVehichleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
-            Date outTime = new Date();
+            
+            Calendar laterOutTime = Calendar.getInstance();
+            laterOutTime.add(Calendar.SECOND, 1);
+            Date outTime = laterOutTime.getTime();
+            // The outTime is now always set one second in the future to avoid that inTime and ouTime got similar dates
+            // This was causing some bug.
+            
             ticket.setOutTime(outTime);
             fareCalculatorService.calculateFare(ticket);
             if(ticketDAO.updateTicket(ticket)) {
