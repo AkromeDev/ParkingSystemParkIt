@@ -71,7 +71,7 @@ public class ParkingDataBaseIT {
 
     @AfterAll
     private static void tearDown(){
-    	//TODO: should this function delete the data created in the tests?
+    	dataBasePrepareService.clearDataBaseEntries();
     }
     
     @Test

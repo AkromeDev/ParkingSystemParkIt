@@ -17,38 +17,25 @@ public class FareCalculatorService {
         double durationMilliSeconds = outHour - inHour;
         double durationHours = durationMilliSeconds / (1000 * 60 * 60);
         
-        boolean isReturningUser = ticket.getIsReturningUser();
-        
         if (durationHours < 0.5) {
         	ticket.setPrice(0);
 
-        } else if (isReturningUser = true){
-        	calculateFareForReturningUser(ticket, durationHours);
-        	
         } else {
-	        switch (ticket.getParkingSpot().getParkingType()){
-	            case CAR: {
-	                ticket.setPrice(durationHours * Fare.CAR_RATE_PER_HOUR);
-	                break;
-	            }
-	            case BIKE: {
-	                ticket.setPrice(durationHours * Fare.BIKE_RATE_PER_HOUR);
-	                break;
-	            }
-	            default: throw new IllegalArgumentException("Unkown Parking Type");
-	        }
+        	calculateFareForUser(ticket, durationHours);
         }
     }
 
-	public void calculateFareForReturningUser(Ticket ticket, double durationHours) {
+	public void calculateFareForUser(Ticket ticket, double durationHours) {
 
+		boolean isReturningUser = ticket.getIsReturningUser();
+		
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
-                ticket.setPrice(durationHours * Fare.CAR_RATE_PER_HOUR * 0.95);
+                ticket.setPrice(durationHours * Fare.CAR_RATE_PER_HOUR * (isReturningUser ? 0.95 : 1));
                 break;
             }
             case BIKE: {
-                ticket.setPrice(durationHours * Fare.BIKE_RATE_PER_HOUR * 0.95);
+                ticket.setPrice(durationHours * Fare.BIKE_RATE_PER_HOUR * (isReturningUser ? 0.95 : 1));
                 break;
             }
             default: throw new IllegalArgumentException("Unkown Parking Type");

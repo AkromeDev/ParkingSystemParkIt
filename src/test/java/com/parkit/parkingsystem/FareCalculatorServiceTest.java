@@ -128,7 +128,7 @@ public class FareCalculatorServiceTest {
     @Test
     public void calculateFareCarWithMoreThanADayParkingTime() throws ClassNotFoundException{
         Date inTime = new Date();
-        inTime.setTime( System.currentTimeMillis() - (  24 * 60 * 60 * 1000) );	//24 hours parking time should give 24 * parking fare per hour
+        inTime.setTime( System.currentTimeMillis() - (  24 * 60 * 60 * 1000) );		//24 hours parking time should give 24 * parking fare per hour
         Date outTime = new Date();
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
 
@@ -148,16 +148,13 @@ public class FareCalculatorServiceTest {
         Date outTime = new Date();
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
         
-        long inHour = ticket.getInTime().getTime();
-        long outHour = ticket.getOutTime().getTime();
+        double durationHours = 100;
         
-        double durationMilliSeconds = outHour - inHour;
-        double durationHours = durationMilliSeconds / (1000 * 60 * 60);
-
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
-        fareCalculatorService.calculateFareForReturningUser(ticket, durationHours);
+        ticket.setIsReturningUser(true);
+        fareCalculatorService.calculateFareForUser(ticket, durationHours);
         assertEquals( (95 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
     }
     

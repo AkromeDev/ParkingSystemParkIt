@@ -63,6 +63,9 @@ public class InputReaderUtil {
 	        
 			} catch (SQLException ex) {
 				ex.printStackTrace();
+				
+			} finally {
+				// TODO close everything Mofo
 		}
 	}
 	
@@ -96,7 +99,10 @@ public class InputReaderUtil {
 	        
 			} catch (SQLException ex) {
 				ex.printStackTrace();
-			} 
+				
+			} finally {
+				// TODO close everything Mofo
+		}
 	}
 			
 }
