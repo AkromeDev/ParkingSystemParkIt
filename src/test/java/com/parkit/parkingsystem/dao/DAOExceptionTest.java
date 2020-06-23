@@ -12,13 +12,12 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 
 import junit.framework.Assert;
 
-
+import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -46,7 +45,7 @@ import java.util.Date;
 import javax.swing.JOptionPane;
 
 @ExtendWith(MockitoExtension.class)
-public class TicketDAOTest {
+public class DAOExceptionTest {
 
     private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
     private static ParkingSpotDAO parkingSpotDAO;
@@ -77,45 +76,16 @@ public class TicketDAOTest {
     	dataBasePrepareService.clearDataBaseEntries();
     }
     
-    @Test
-    @DisplayName("Tests the getTicket sets the values properly")
-    public void getTicketTest() throws Exception{
+    @Test(expected = NullPointerException.class)
+    public void getTicketThrowTest() throws ClassNotFoundException{
     	//ARRANGE
-        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        Ticket ticket = new Ticket();
         
         // ACT
-        parkingService.processIncomingVehicle();
-        Ticket ticket = ticketDAO.getTicket("ABCDEF");
+        ticket.setId(1222334);
         
         // ASSERT
-        assertEquals(ticket.getVehicleRegNumber(), "ABCDEF");
-        assertEquals(ticket.getIsReturningUser(), false);
-        assertEquals(ticket.getOutTime(), null);
-        assertEquals(ticket.getPrice(), 0);
-        assertNotNull(ticket.getInTime());
+        when(ticketDAO.saveTicket(ticket)).thenThrow(new NullPointerException(("I don't now")));
     }
-    
-    @Test
-    @DisplayName("Tests updateTicket updates the values properly")
-    public void updateTicketTest() throws Exception{
-    	//ARRANGE
-        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-        
-        // ACT
-        parkingService.processIncomingVehicle();
-        Ticket ticket = ticketDAO.getTicket("ABCDEF");
-        
-        Date instant = new Date(System.currentTimeMillis());
-        
-        ticket.setPrice(1400);
-        ticket.setOutTime(instant);
-        
-        ticketDAO.updateTicket(ticket);
-        
-        Ticket ticketUpdated = ticketDAO.getTicket("ABCDEF");
-        
-        // ASSERT
-        assertNotNull(ticketUpdated.getOutTime());
-        assertEquals(ticketUpdated.getPrice(), 1400);
-    }
+
 }

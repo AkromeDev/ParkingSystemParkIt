@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 
 public class TicketDAO {
@@ -19,7 +20,7 @@ public class TicketDAO {
 
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
-    public boolean saveTicket(Ticket ticket){
+    public boolean saveTicket(Ticket ticket) {
         Connection con = null;
         try {
         	con = dataBaseConfig.getConnection();
@@ -34,7 +35,7 @@ public class TicketDAO {
             ps.setBoolean(6, ticket.getIsReturningUser());
             return ps.execute();
         }catch (Exception ex){
-            logger.error("Error fetching next available slot 1",ex);
+        	logger.error("Error fetching next available slot 1",ex);
         }finally {
             dataBaseConfig.closeConnection(con);
         }
