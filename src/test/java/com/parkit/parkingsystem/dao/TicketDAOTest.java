@@ -39,6 +39,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.JOptionPane;
 
@@ -92,6 +94,29 @@ public class TicketDAOTest {
         assertNotNull(ticket.getInTime());
     }
     
+    @Test
+    @DisplayName("Tests updateTicket updates the values properly")
+    public void updateTicketTest() throws Exception{
+    	//ARRANGE
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        
+        // ACT
+        parkingService.processIncomingVehicle();
+        Ticket ticket = ticketDAO.getTicket("ABCDEF");
+        
+        Date instant = new Date(System.currentTimeMillis());
+        
+        ticket.setPrice(1400);
+        ticket.setOutTime(instant);
+        
+        ticketDAO.updateTicket(ticket);
+        
+        
+        Ticket ticketUpdated = ticketDAO.getTicket("ABCDEF");
+        // ASSERT
+        assertNotNull(ticketUpdated.getOutTime());
+        assertEquals(ticketUpdated.getPrice(), 1400);
+    }
 //    @Test
 //    @DisplayName("Tests if the parking spot availability is set to false")
 //    public void testParkingTableAvailability() throws Exception{
