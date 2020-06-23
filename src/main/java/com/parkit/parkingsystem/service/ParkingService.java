@@ -1,5 +1,6 @@
 package com.parkit.parkingsystem.service;
 
+import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
@@ -9,6 +10,10 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -45,6 +50,7 @@ public class ParkingService {
                 ticket.setPrice(0);
                 ticket.setInTime(inTime);
                 ticket.setOutTime(null);
+                ticket.setIsReturningUser(getIfReturningUser(vehicleRegNumber));
                 ticketDAO.saveTicket(ticket);
                 System.out.println("Generated Ticket and saved in DB");
                 System.out.println("Please park your vehicle in spot number:"+parkingSpot.getId());
@@ -124,4 +130,31 @@ public class ParkingService {
             logger.error("Unable to process exiting vehicle",e);
         }
     }
+    
+public boolean getIfReturningUser(String vehicleRegNumber) throws ClassNotFoundException {
+		
+		DataBaseConfig conn = new DataBaseConfig();
+		Connection conn1 = null;
+		
+		boolean isReturningUser = false;
+		
+		try {
+			conn1 = conn.getConnection();
+			Statement stmt = conn1.createStatement();
+			String SQL = "SELECT VEHICLE_REG_NUMBER FROM ticket WHERE VEHICLE_REG_NUMBER ='"+vehicleRegNumber+"' AND OUT_TIME IS NOT NULL";
+			
+	        ResultSet r1= stmt.executeQuery(SQL);
+		        
+		        if (r1.next()) {
+		        	isReturningUser = true;
+		        	System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
+				} else {
+					isReturningUser = false;
+				} 
+			} catch (SQLException ex) {
+				logger.error("Error in readIfReturningUSer",ex);
+		}
+		
+		return isReturningUser;
+	}
 }
