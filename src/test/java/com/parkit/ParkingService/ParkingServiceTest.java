@@ -1,4 +1,4 @@
-package com.parkit.parkingsystem;
+package com.parkit.ParkingService;
 
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
@@ -14,13 +14,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Date;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import org.junit.Assert;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -88,16 +89,4 @@ public class ParkingServiceTest {
     	// ACT & ASSERT
     	assertThrows(IllegalArgumentException.class, () -> parkingService1.getVehichleType());
     }
-
-    @Test 
-    @DisplayName("tests if parking spot is returned correctly")
-    public void getNextParkingNumberIfAvailable(){
-    	//ARRANGE
-    	when(inputReaderUtil.readSelection()).thenReturn(10);
-    	ParkingService parkingService1 = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-    	
-    	// ACT & ASSERT
-    	assertThrows(IllegalArgumentException.class, () -> parkingService1.getVehichleType());
-    }
-
 }
