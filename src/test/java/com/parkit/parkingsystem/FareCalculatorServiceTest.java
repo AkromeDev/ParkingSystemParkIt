@@ -139,7 +139,6 @@ public class FareCalculatorServiceTest {
         assertEquals( (24 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
     }
     
-    // TODO Check that with Nick, this seems wrong
     @Test
     @ DisplayName("Test if the price for returning visitors has 5% discount")
     public void calculateFareCarForReturningVisitorsOneHundredHours(){
@@ -156,6 +155,18 @@ public class FareCalculatorServiceTest {
         ticket.setIsReturningUser(true);
         fareCalculatorService.calculateFareForUser(ticket, durationHours);
         assertEquals( (95 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
+    }
+    
+    @Test
+    @ DisplayName("Test default case from calculateFareCarForUser")
+    public void calculateFareCarForUserUnknowType(){
+    	ParkingType other = null;
+        ParkingSpot parkingSpot = new ParkingSpot(1, other ,false);
+        double durationHours = 100;
+        
+        ticket.setParkingSpot(parkingSpot);
+        
+        assertThrows(NullPointerException.class, () -> fareCalculatorService.calculateFareForUser(ticket, durationHours));
     }
     
 }
