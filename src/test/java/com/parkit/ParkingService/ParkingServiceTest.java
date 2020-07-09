@@ -18,10 +18,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 import org.junit.Assert;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -92,5 +97,24 @@ public class ParkingServiceTest {
     	
     	// ACT & ASSERT
     	assertThrows(IllegalArgumentException.class, () -> parkingService.getVehichleType());
+    }
+    
+    @Test 
+    @DisplayName("tests if the right exception message is displayed when the parking is full")
+    public void getNextParkingNumberIfAvailableFullParkingSlotsTest2(){
+    	//ARRANGE
+    	when(inputReaderUtil.readSelection()).thenReturn(1);
+    	parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+    	ParkingType parkingType = ParkingType.CAR;
+    	when(parkingSpotDAO.getNextAvailableSlot(parkingType)).thenReturn(0);
+    	
+    	// ASSERT & ACT 
+    	try {
+    	parkingService.getNextParkingNumberIfAvailable();
+    	
+    	} catch (Exception e) {
+    		String ex = e.getMessage();
+    		assertThat(ex, containsString("Error fetching next available parking slot"));
+    	}
     }
 }

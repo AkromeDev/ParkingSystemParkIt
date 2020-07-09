@@ -79,7 +79,7 @@ public class ParkingDataBaseIT {
     
     @Test
     @DisplayName("Tests if the car can be found in the system")
-    public void testParkingACar() throws Exception{
+    public void ParkingACarTest() throws Exception{
     	//ARRANGE
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         String testRegistrationNumber = "ABCDEF";
@@ -95,7 +95,7 @@ public class ParkingDataBaseIT {
     
     @Test
     @DisplayName("Tests if the parking spot availability is set to false")
-    public void testParkingTableAvailability() throws Exception{
+    public void ParkingTableAvailabilityTest() throws Exception{
     	//ARRANGE
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         
@@ -109,7 +109,7 @@ public class ParkingDataBaseIT {
     
     @Test
     @DisplayName("Tests if a price is set in the DB")
-    public void testParkingLotExitPrice() throws ClassNotFoundException{
+    public void ParkingLotExitPriceTest() throws ClassNotFoundException{
     	//ARRANGE
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         
@@ -125,7 +125,7 @@ public class ParkingDataBaseIT {
     
     @Test
     @DisplayName("Tests if an OutTime is set in the DB")
-    public void testParkingLotExitOutTime() throws ClassNotFoundException{
+    public void ParkingLotExitOutTimeTest() throws ClassNotFoundException{
     	//ARRANGE
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         
@@ -148,7 +148,7 @@ public class ParkingDataBaseIT {
     
     @Test
     @DisplayName("Tests if the system recognizes a returning user")
-    public void testInputReaderUtilReturningUser() throws ClassNotFoundException{
+    public void InputReaderUtilReturningUserTest() throws ClassNotFoundException{
     	//ARRANGE
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         
@@ -162,7 +162,7 @@ public class ParkingDataBaseIT {
     
     @Test
     @DisplayName("Tests if the returning users are greeted properly")
-    public void testInputReaderUtilReturningUserWelcomeMessage() throws ClassNotFoundException{
+    public void InputReaderUtilReturningUserWelcomeMessageTest() throws ClassNotFoundException{
     	//ARRANGE
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
