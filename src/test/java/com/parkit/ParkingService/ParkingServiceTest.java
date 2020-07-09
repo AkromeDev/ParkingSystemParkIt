@@ -16,6 +16,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Date;
 
 import org.junit.Assert;
@@ -35,6 +37,8 @@ public class ParkingServiceTest {
     private static ParkingSpotDAO parkingSpotDAO;
     @Mock
     private static TicketDAO ticketDAO;
+    @Mock
+    private static Ticket ticket;
 
     @BeforeEach
     private void setUpPerTest() {
@@ -62,10 +66,10 @@ public class ParkingServiceTest {
     public void getVehichleTypeCarTest(){
     	//ARRANGE
     	when(inputReaderUtil.readSelection()).thenReturn(1);
-    	ParkingService parkingService1 = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+    	parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
     	
     	// ACT & ASSERT
-        assertEquals(parkingService1.getVehichleType(), ParkingType.CAR);
+        assertEquals(parkingService.getVehichleType(), ParkingType.CAR);
     }
     
     @Test
@@ -73,10 +77,10 @@ public class ParkingServiceTest {
     public void getVehichleTypeBikeTest(){
     	//ARRANGE
     	when(inputReaderUtil.readSelection()).thenReturn(2);
-    	ParkingService parkingService1 = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+    	parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
     	
     	// ACT & ASSERT
-        assertEquals(parkingService1.getVehichleType(), ParkingType.BIKE);
+        assertEquals(parkingService.getVehichleType(), ParkingType.BIKE);
     }
     
     @Test 
@@ -84,9 +88,9 @@ public class ParkingServiceTest {
     public void getVehichleTypeIncorrectInputTest(){
     	//ARRANGE
     	when(inputReaderUtil.readSelection()).thenReturn(10);
-    	ParkingService parkingService1 = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+    	parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
     	
     	// ACT & ASSERT
-    	assertThrows(IllegalArgumentException.class, () -> parkingService1.getVehichleType());
+    	assertThrows(IllegalArgumentException.class, () -> parkingService.getVehichleType());
     }
 }

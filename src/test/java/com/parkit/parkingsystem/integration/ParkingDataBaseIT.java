@@ -10,8 +10,7 @@ import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -32,7 +32,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.hamcrest.CoreMatchers.containsString;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -118,7 +122,7 @@ public class ParkingDataBaseIT {
         
         assertNotNull(ticket.getPrice());
     }
-
+    
     @Test
     @DisplayName("Tests if an OutTime is set in the DB")
     public void testParkingLotExitOutTime() throws ClassNotFoundException{
@@ -152,13 +156,33 @@ public class ParkingDataBaseIT {
         parkingService.processIncomingVehicle();
         parkingService.processExitingVehicle();
         
+        // ASSERT
+        assertTrue(parkingService.getIfReturningUser("ABCDEF"));
+    }
+    
+    @Test
+    @DisplayName("Tests if the returning users are greeted properly")
+    public void testInputReaderUtilReturningUserWelcomeMessage() throws ClassNotFoundException{
+    	//ARRANGE
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+        
+        //ACT 
         parkingService.processIncomingVehicle();
         parkingService.processExitingVehicle();
         
-        parkingService.processIncomingVehicle();
+        parkingService.getIfReturningUser("ABCDEF");
         
+        String out = null;
+		try {
+			out = outContent.toString("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
         // ASSERT
-        assertTrue(parkingService.getIfReturningUser("ABCDEF"));
+        Assert.assertThat(out, containsString("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount."));
     }
 
 }
