@@ -1,6 +1,7 @@
 package com.parkit.parkingsystem.service;
 
 import com.parkit.parkingsystem.config.DataBaseConfig;
+import com.parkit.parkingsystem.constants.DBConstants;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
@@ -11,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -140,12 +142,11 @@ public boolean getIfReturningUser(String vehicleRegNumber) throws ClassNotFoundE
 		
 		try {
 			conn1 = conn.getConnection();
-			Statement stmt = conn1.createStatement();
-			String SQL = "SELECT VEHICLE_REG_NUMBER FROM ticket WHERE VEHICLE_REG_NUMBER ='"+vehicleRegNumber+"' AND OUT_TIME IS NOT NULL";
-			
-	        ResultSet r1= stmt.executeQuery(SQL);
+			PreparedStatement ps = conn1.prepareStatement(DBConstants.GET_RETURNING_USER);
+			ps.setString(1, vehicleRegNumber);
+			ResultSet rs = ps.executeQuery();
 		        
-		        if (r1.next()) {
+		        if (rs.next()) {
 		        	isReturningUser = true;
 		        	System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
 				} else {
