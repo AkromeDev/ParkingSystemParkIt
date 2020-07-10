@@ -37,13 +37,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Date;
 
-import javax.swing.JOptionPane;
 
 @ExtendWith(MockitoExtension.class)
 public class ParkingDataBaseIT {
@@ -55,6 +49,9 @@ public class ParkingDataBaseIT {
 
     @Mock
     private static InputReaderUtil inputReaderUtil;
+    
+    @Mock
+    private static Ticket ticket;
 
     @BeforeAll
     private static void setUp() throws Exception{
@@ -183,6 +180,30 @@ public class ParkingDataBaseIT {
 		
         // ASSERT
         Assert.assertThat(out, containsString("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount."));
+    }
+    
+    @Test
+    @DisplayName("Tests if the returning users are greeted properly")
+    public void processExitingVehicleMessageTest() throws Exception{
+    	//ARRANGE
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+        
+        //ACT 
+        parkingService.processIncomingVehicle();
+        parkingService.processExitingVehicle();
+        
+        String out = null;
+		try {
+			out = outContent.toString("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+        // ASSERT
+        Assert.assertThat(out, containsString("Please pay the parking fare:"));
+        Assert.assertThat(out, containsString("Recorded out-time for vehicle number:"));
     }
 
 }
