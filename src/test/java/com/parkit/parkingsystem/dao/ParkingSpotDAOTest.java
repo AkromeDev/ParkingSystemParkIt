@@ -17,6 +17,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
@@ -29,7 +32,6 @@ public class ParkingSpotDAOTest {
 
     private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
     private static ParkingSpotDAO parkingSpotDAO;
-    private static TicketDAO ticketDAO;
     private static ParkingSpot parkingSpot;
     private static DataBasePrepareService dataBasePrepareService;
 
@@ -40,8 +42,6 @@ public class ParkingSpotDAOTest {
     private static void setUp() throws Exception{
         parkingSpotDAO = new ParkingSpotDAO();
         parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
-        ticketDAO = new TicketDAO();
-        ticketDAO.dataBaseConfig = dataBaseTestConfig;
         dataBasePrepareService = new DataBasePrepareService();
     }
 
@@ -64,10 +64,10 @@ public class ParkingSpotDAOTest {
         ParkingType car = ParkingType.CAR;
         
         // ACT
-        int num = parkingSpotDAO.getNextAvailableSlot(car);
+        int spot = parkingSpotDAO.getNextAvailableSlot(car);
         
         // ASSERT
-        assertEquals(num, 1);
+        assertEquals(spot, 1);
     }
     
     @Test
@@ -79,10 +79,10 @@ public class ParkingSpotDAOTest {
         
         // ACT
         parkingSpotDAO.updateParking(parkingSpot);
-        int num = parkingSpotDAO.getNextAvailableSlot(car);
+        int spot = parkingSpotDAO.getNextAvailableSlot(car);
         
         // ASSERT
-        assertEquals(num, 2);
+        assertEquals(spot, 2);
     }
     
     @Test
@@ -96,10 +96,10 @@ public class ParkingSpotDAOTest {
         // ACT
         parkingSpotDAO.updateParking(parkingSpot);
         parkingSpotDAO.updateParking(parkingSpot2);
-        int num = parkingSpotDAO.getNextAvailableSlot(car);
+        int spot = parkingSpotDAO.getNextAvailableSlot(car);
         
         // ASSERT
-        assertEquals(num, 3);
+        assertEquals(spot, 3);
     }
     
     @Test
@@ -116,9 +116,37 @@ public class ParkingSpotDAOTest {
         parkingSpotDAO.updateParking(parkingSpot2);
         parkingSpotDAO.updateParking(parkingSpot3);
         
-        int num = parkingSpotDAO.getNextAvailableSlot(car);
+        int spot = parkingSpotDAO.getNextAvailableSlot(car);
         
         // ASSERT
-        assertEquals(num, 0);
+        assertEquals(spot, 0);
+    }
+    
+    @Test
+    @DisplayName("Tests is update Ticket returns true when a valid parkingSpot is entered")
+    public void updateParkingTest() {
+    	//ARRANGE
+        parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
+        boolean updated = false;
+        
+        // ACT
+        updated = parkingSpotDAO.updateParking(parkingSpot);
+        
+        // ASSERT
+        assertTrue(updated);
+    }
+    
+    @Test
+    @DisplayName("Tests is update Ticket returns false when an invalid parkingSpot is entered")
+    public void updateParkingTest2() {
+    	//ARRANGE
+        parkingSpot = new ParkingSpot(10, ParkingType.CAR, true);
+        boolean updated = true;
+        
+        // ACT
+        updated = parkingSpotDAO.updateParking(parkingSpot);
+        
+        // ASSERT
+        assertFalse(updated);
     }
 }
