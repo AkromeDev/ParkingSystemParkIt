@@ -59,7 +59,7 @@ public class ParkingSpotDAOTest {
     
     @Test
     @DisplayName("tests if the the first parkingspot is attributed when no car is in the parking")
-    public void getNextAvailableSlotTest() throws Exception{
+    public void getNextAvailableSlotTest() {
     	//ARRANGE
         ParkingType car = ParkingType.CAR;
         
@@ -72,7 +72,7 @@ public class ParkingSpotDAOTest {
     
     @Test
     @DisplayName("tests if the the second parkingspot is attributed when one car is already in the parking")
-    public void getNextAvailableSlotTest2() throws Exception{
+    public void getNextAvailableSlotTest2() {
     	//ARRANGE
         ParkingType car = ParkingType.CAR;
         parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
@@ -83,5 +83,22 @@ public class ParkingSpotDAOTest {
         
         // ASSERT
         assertEquals(num, 2);
+    }
+    
+    @Test
+    @DisplayName("tests if the the second parkingspot is attributed when two cars are already in the parking")
+    public void getNextAvailableSlotTest3() {
+    	//ARRANGE
+        ParkingType car = ParkingType.CAR;
+        parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+        ParkingSpot parkingSpot2 = new ParkingSpot(2, ParkingType.CAR, false);
+        
+        // ACT
+        parkingSpotDAO.updateParking(parkingSpot);
+        parkingSpotDAO.updateParking(parkingSpot2);
+        int num = parkingSpotDAO.getNextAvailableSlot(car);
+        
+        // ASSERT
+        assertEquals(num, 3);
     }
 }
