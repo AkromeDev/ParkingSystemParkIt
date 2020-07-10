@@ -3,6 +3,7 @@ package com.parkit.parkingsystem.dao;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
+import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
@@ -29,6 +30,7 @@ public class ParkingSpotDAOTest {
     private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
     private static ParkingSpotDAO parkingSpotDAO;
     private static TicketDAO ticketDAO;
+    private static ParkingSpot parkingSpot;
     private static DataBasePrepareService dataBasePrepareService;
 
     @Mock
@@ -56,13 +58,30 @@ public class ParkingSpotDAOTest {
     }
     
     @Test
-    @DisplayName("Tests the getTicket sets the values properly")
-    public void getTicketTest() throws Exception{
+    @DisplayName("tests if the the first parkingspot is attributed when no car is in the parking")
+    public void getNextAvailableSlotTest() throws Exception{
     	//ARRANGE
         ParkingType car = ParkingType.CAR;
+        
         // ACT
         int num = parkingSpotDAO.getNextAvailableSlot(car);
+        
         // ASSERT
         assertEquals(num, 1);
+    }
+    
+    @Test
+    @DisplayName("tests if the the second parkingspot is attributed when one car is already in the parking")
+    public void getNextAvailableSlotTest2() throws Exception{
+    	//ARRANGE
+        ParkingType car = ParkingType.CAR;
+        parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+        
+        // ACT
+        parkingSpotDAO.updateParking(parkingSpot);
+        int num = parkingSpotDAO.getNextAvailableSlot(car);
+        
+        // ASSERT
+        assertEquals(num, 2);
     }
 }
