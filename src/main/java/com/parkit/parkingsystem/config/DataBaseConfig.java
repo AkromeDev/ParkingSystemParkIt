@@ -4,17 +4,41 @@ import org.apache.logging.log4j.LogManager;
 
 import org.apache.logging.log4j.Logger;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.*;
+import java.util.Properties;
 
 public class DataBaseConfig {
 
     private static final Logger logger = LogManager.getLogger("DataBaseConfig");
 
-    public Connection getConnection() throws ClassNotFoundException, SQLException {
+    public Connection getConnection() {
         logger.info("Create DB connection");
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        return DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/prod?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","Wellthisisalot7!");
+        
+        Connection myConn = null;
+        
+        try {
+        	// load Properties file
+        	Properties props = new Properties();
+        	props.load(new FileInputStream("src/main/resources/config.properties"));
+        	
+        	// read the properties File
+        	String url = props.getProperty("db.url");
+        	String user = props.getProperty("db.user");
+        	String password = props.getProperty("db.password");
+        	
+        	myConn = DriverManager.getConnection(url, user, password);
+        	
+        } catch (IOException ex){
+        	logger.error("Could not create a connection with the database IOException");
+        	System.err.println(ex);
+        } catch (SQLException ex) {
+        	logger.error("Could not create a connection with the database getConnection()");
+        	System.err.println(ex);
+        }
+        
+        return myConn;
     }
 
     public void closeConnection(Connection con){
