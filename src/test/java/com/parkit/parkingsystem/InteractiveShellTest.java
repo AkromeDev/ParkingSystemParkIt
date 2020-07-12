@@ -50,30 +50,4 @@ public class InteractiveShellTest {
         Assert.assertThat(out, containsString("Please select an option. Simply enter the number to choose an action"));
         Assert.assertThat(out, containsString("3 Shutdown System"));
     }
-    
-    @Test 
-    @DisplayName("tests if the right message is displayed when enteing the app and leaving it right away")
-    public void loadInterfaceTest2() throws IOException{
-    	//ARRANGE
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-        
-        //ACT 
-        String input = "1\n 1\n 1\n 3\n";
-        InputStream inputStream = new ByteArrayInputStream(input.getBytes());
-        System.setIn(inputStream);
-        
-        
-        InteractiveShell.loadInterface();
-        
-        String out = null;
-		try {
-			out = outContent.toString("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-        // ASSERT
-        Assert.assertThat(out, containsString("Please select an option. Simply enter the number to choose an action"));
-        Assert.assertThat(out, containsString("3 Shutdown System"));
-    }
 }
