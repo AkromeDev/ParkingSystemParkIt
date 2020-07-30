@@ -2,7 +2,6 @@ package com.parkit.parkingsystem.service;
 
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.model.Ticket;
-import com.parkit.parkingsystem.util.InputReaderUtil;
 
 public class FareCalculatorService {
 

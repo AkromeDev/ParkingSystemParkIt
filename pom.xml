@@ -7,6 +7,7 @@
     <artifactId>parking-system</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,6 +21,7 @@
             <url>scp://localhost/tmp</url>
         </site>
     </distributionManagement>
+    
 
     <dependencies>
         <dependency>
